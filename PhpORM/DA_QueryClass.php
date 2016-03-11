@@ -7,32 +7,32 @@
 require_once 'DA_DataBaseConnectionClass.php';
 require_once 'DA_QueryInterface.php';
 
-class DA_QueryClass {
+class QueryClass {
 
-    private $TableName = array();
-    private $FieldListArray = array();
-    private $ConditionArray = array();
-    private $StringCondition = array();
-    private $Sql = "";
-    private $DataBaseConnect;
+    private $tableName = array();
+    private $fieldListArray = array();
+    private $conditionArray = array();
+    private $stringCondition = array();
+    private $sql = "";
+    private $dataBaseConnect;
     private $connection;
 
-    public function DA_QueryClass() { //Constructor
+    public function QueryClass() { //Constructor
         $db = new DA_DataBaseConnectionClass();
-        $this->DataBaseConnect = $db;
+        $this->dataBaseConnect = $db;
         $this->connection = $db->getConnection();
     }
 
-    public function SetTable($TableName_) {
-        array_push($this->TableName, $TableName_);
+    public function setTable($TableName_) {
+        array_push($this->tableName, $TableName_);
     }
 
-    public function AddField($FieldValue_, $ColumnName_ = "0") {
+    public function addField($FieldValue_, $ColumnName_ = "0") {
         trigger_error("AddField function is depricated. Use setField(columnName, fieldValue) or setField(fieldValue) instead");
         if ($ColumnName_ == "0") {
-            array_push($this->FieldListArray, $FieldValue_);
+            array_push($this->fieldListArray, $FieldValue_);
         } else {
-            $this->FieldListArray[$ColumnName_] = $FieldValue_;
+            $this->fieldListArray[$ColumnName_] = $FieldValue_;
         }
     }
 
@@ -43,32 +43,32 @@ class DA_QueryClass {
         $args = func_get_args();
         if (func_num_args() == 1) {
             $filedValue = $args[0];
-            array_push($this->FieldListArray, $filedValue);
+            array_push($this->fieldListArray, $filedValue);
         }
         if (func_num_args() == 2) {
             $columnName = $args[0];
             $filedValue = $args[1];
-            $this->FieldListArray[$columnName] = $filedValue;
+            $this->fieldListArray[$columnName] = $filedValue;
         }
     }
 
-    public function AddCondition($Key_, $Value_) {
-        $this->ConditionArray[$Key_] = $Value_;
+    public function addCondition($Key_, $Value_) {
+        $this->conditionArray[$Key_] = $Value_;
     }
 
-    public function AddStringCondition($Condition) {
+    public function addStringCondition($Condition) {
         if (null == $Condition)
             return;
-        array_push($this->StringCondition, $Condition);
+        array_push($this->stringCondition, $Condition);
     }
 
-    public function AddMoreThanCondition($Key_, $Value_) {
+    public function addMoreThanCondition($Key_, $Value_) {
         $this->MoreThanConditionArray[$Key_] = $Value_;
     }
 
-    public function Insert() {
-        $Sql = "INSERT INTO " . $this->TableName[0] . " VALUES (";
-        foreach ($this->FieldListArray as $FieldValueTemp) {
+    public function insert() {
+        $Sql = "INSERT INTO " . $this->tableName[0] . " VALUES (";
+        foreach ($this->fieldListArray as $FieldValueTemp) {
             if ($FieldValueTemp != 'CURRENT_TIMESTAMP') {
                 $Sql = $Sql . "'" . $FieldValueTemp . "',";
             } else {
@@ -78,35 +78,35 @@ class DA_QueryClass {
         $Sql = substr($Sql, 0, strlen($Sql) - 1);
         $Sql = $Sql . ")";
         //echo $Sql;
-        if ((mysqli_query($this->DataBaseConnect->getConnection(), $Sql)) == 1) {
+        if ((mysqli_query($this->dataBaseConnect->getConnection(), $Sql)) == 1) {
             return true;
         } else
             return false;
     }
 
-    public function Select() {
+    public function select() {
         $Sql = "SELECT ";
-        foreach ($this->FieldListArray as $FieldValueTemp) {
+        foreach ($this->fieldListArray as $FieldValueTemp) {
             $Sql = $Sql . $FieldValueTemp . ",";
         }
         $Sql = substr($Sql, 0, strlen($Sql) - 1);
         $Sql = $Sql . " FROM ";
-        foreach ($this->TableName as $TempTableName) {
+        foreach ($this->tableName as $TempTableName) {
             $Sql = $Sql . $TempTableName . ",";
         }
         $Sql = substr($Sql, 0, strlen($Sql) - 1);
-        if (count($this->ConditionArray) > 0) {
+        if (count($this->conditionArray) > 0) {
             $Sql = $Sql . " WHERE ";
-            foreach ($this->ConditionArray as $Key_ => $Value_) {
+            foreach ($this->conditionArray as $Key_ => $Value_) {
                 $Sql = $Sql . "$Key_ = '$Value_' AND ";
             }
-            foreach ($this->StringCondition as $Value_) {
+            foreach ($this->stringCondition as $Value_) {
                 $Sql = $Sql . "$Value_ AND ";
             }
             $Sql = substr($Sql, 0, strlen($Sql) - 4);
         }
         //echo $Sql;
-        $Table = mysqli_query($this->DataBaseConnect->getConnection(), $Sql);
+        $Table = mysqli_query($this->dataBaseConnect->getConnection(), $Sql);
         $Json = array(); // Json is just an array variable and not in Json format
         while ($Row = mysqli_fetch_assoc($Table)) {
             array_push($Json, $Row);
@@ -114,27 +114,27 @@ class DA_QueryClass {
         return json_encode($Json);
     }
 
-    public function Update() {
+    public function update() {
         //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value
-        $Sql = "UPDATE " . $this->TableName[0] . " SET ";
-        foreach ($this->FieldListArray as $Key_ => $Value_) {
+        $Sql = "UPDATE " . $this->tableName[0] . " SET ";
+        foreach ($this->fieldListArray as $Key_ => $Value_) {
             $Sql = $Sql . "$Key_='$Value_', ";
         }
         $Sql = substr($Sql, 0, strlen($Sql) - 2);
         $Sql = $Sql . " WHERE ";
-        foreach ($this->ConditionArray as $Key_ => $Value_) {
+        foreach ($this->conditionArray as $Key_ => $Value_) {
             $Sql = $Sql . "$Key_='$Value_' AND ";
         }
         $Sql = substr($Sql, 0, strlen($Sql) - 4);
         //echo $Sql;
-        return mysqli_query($this->DataBaseConnect->getConnection(), $Sql);
+        return mysqli_query($this->dataBaseConnect->getConnection(), $Sql);
     }
 
-    public function Delete($TableName_, $FieldArray_, $ConditionArray_) {
+    public function delete($TableName_, $FieldArray_, $ConditionArray_) {
         
     }
 
-    public function Count() {
+    public function count() {
         
     }
 
@@ -142,19 +142,19 @@ class DA_QueryClass {
         $Sql = "SELECT DISTINCT($Field_)";
 
         $Sql = $Sql . " FROM ";
-        foreach ($this->TableName as $TempTableName) {
+        foreach ($this->tableName as $TempTableName) {
             $Sql = $Sql . $TempTableName . ",";
         }
         $Sql = substr($Sql, 0, strlen($Sql) - 1);
-        if (count($this->ConditionArray) > 0) {
+        if (count($this->conditionArray) > 0) {
             $Sql = $Sql . " WHERE ";
-            foreach ($this->ConditionArray as $Key_ => $Value_) {
+            foreach ($this->conditionArray as $Key_ => $Value_) {
                 $Sql = $Sql . "$Key_ = '$Value_' AND ";
             }
             $Sql = substr($Sql, 0, strlen($Sql) - 4);
         }
         //echo $Sql;
-        $Table = mysqli_query($this->DataBaseConnect->getConnection(), $Sql);
+        $Table = mysqli_query($this->dataBaseConnect->getConnection(), $Sql);
         $Json = array(); // Json is just an array variable and not in Json format
         while ($Row = mysqli_fetch_assoc($Table)) {
             array_push($Json, $Row);
@@ -162,24 +162,24 @@ class DA_QueryClass {
         return json_encode($Json);
     }
 
-    public function StartTransaction($TransactionName_) {
-        return mysqli_autocommit($this->DataBaseConnect->getConnection(), FALSE);
+    public function startTransaction($TransactionName_) {
+        return mysqli_autocommit($this->dataBaseConnect->getConnection(), FALSE);
     }
 
-    public function EndTransaction($TransactionName_) {
-        mysqli_autocommit($this->DataBaseConnect->getConnection(), TRUE);
-        mysqli_close($this->DataBaseConnect->getConnection());
+    public function endTransaction($TransactionName_) {
+        mysqli_autocommit($this->dataBaseConnect->getConnection(), TRUE);
+        mysqli_close($this->dataBaseConnect->getConnection());
     }
 
-    public function RollbackTransaction($TransactionName_) {
-        mysqli_rollback($this->DataBaseConnect->getConnection());
-        mysqli_close($this->DataBaseConnect->getConnection());
+    public function rollbackTransaction($TransactionName_) {
+        mysqli_rollback($this->dataBaseConnect->getConnection());
+        mysqli_close($this->dataBaseConnect->getConnection());
     }
 
-    public function SelectQueryRun($Sql_) {
+    public function selectQueryRun($Sql_) {
         $Sql = $Sql_;
         //echo $Sql;
-        $Table = mysqli_query($this->DataBaseConnect->getConnection(), $Sql);
+        $Table = mysqli_query($this->dataBaseConnect->getConnection(), $Sql);
         $Json = array(); // Json is just an array variable and not in Json format
         while ($Row = mysqli_fetch_assoc($Table)) {
             array_push($Json, $Row);
@@ -188,15 +188,15 @@ class DA_QueryClass {
     }
 
     public function getConnection() {
-        return $this->DataBaseConnect->getConnection();
+        return $this->dataBaseConnect->getConnection();
     }
 
     public function reset() {
-        $this->TableName = array();
-        $this->FieldListArray = array();
-        $this->ConditionArray = array();
-        $this->StringCondition = array();
-        $this->Sql = "";
+        $this->tableName = array();
+        $this->fieldListArray = array();
+        $this->conditionArray = array();
+        $this->stringCondition = array();
+        $this->sql = "";
     }
 
 }
