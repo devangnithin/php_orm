@@ -3,7 +3,7 @@
 1. You need to update the db connection details in PhpORM/DA_DataBaseConnectionClass.php
  
 # Common to all crud
-1. Import the DA_QueryClass. eg require_once(dirname(__FILE__)."/DataAccessLayer/DA_QueryClass.php");. Make sure path referes correctly.
+1. Import the DA_QueryClass. eg require_once(dirname(__FILE__)."/php_orm/DA_QueryClass.php");. Make sure path referes correctly.
 2. Create a new object of QueryClass.
     $queryClassObject=new QueryClass();
 3. Set table name using setTable method.
