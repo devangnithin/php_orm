@@ -9,8 +9,8 @@
 3. Set table name using SetTable method.
   $QueryClassObject->SetTable("userinfo");
 4. Add fields which need to be queried.
-        $QueryClassObject->AddField("PassWord");
-        $QueryClassObject->AddField("Status");
+        $QueryClassObject->setField("PassWord");
+        $QueryClassObject->setField("Status");
 5. Add condition to select. (Optional)        
         $QueryClassObject->AddCondition("Email", $EmailId_);
 6.  Run select method.       
@@ -24,7 +24,7 @@ NOTE: Select method returns the queried value in JSON format. You may choose to 
 3. Set table name using SetTable method.
   $QueryClassObject->SetTable("userinfo");
 4. Add fields which need to be inserted.
-        $QueryClassObject->AddField("PassWord");
+        $QueryClassObject->setField("PassWord");
 5. Execute insert method.
         $QueryClassObject->Insert()
         
@@ -39,20 +39,10 @@ Note: Insert method returns true on successful insertion and false on error. Ins
 3. Set table name using SetTable method.
 	$QueryClassObject->SetTable("userinfo");
 4. Add fields which need to be inserted is value-key pair.
-	$QueryClassObject->AddField("Password Reset","Status");
-<<<<<<< HEAD
-	
-	NOTE: The field value appears after the value bypassing general convention. In the example above Status is the db field. This need to be corrected.
- 5. Add condition to update
- $QueryClassObject->AddCondition("Email", $Email_);
- 6.Call update method.
-            $QueryClassObject->Update()
-=======
-	NOTE: The field value appears after the value bypassing general convention. In the example above Status is the db 		field. This need to be corrected.
+	$QueryClassObject->setField("Status", "Password Reset"); (sqlfiled, value)
 5. Add condition to update
  	$QueryClassObject->AddCondition("Email", $Email_);
 6.Call update method.
 	$QueryClassObject->Update()
->>>>>>> 2c5c14e5be97637f4d844cd4feb6f3d72ec1aabc
 Note: Update method returns true on successful updation and false on error.
 
