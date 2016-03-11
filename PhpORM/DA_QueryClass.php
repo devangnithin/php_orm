@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Description of DA_LoginClass
+ *
+ * @author Nithin Devang
+ */
 require_once 'DA_DataBaseConnectionClass.php';
 require_once 'DA_QueryInterface.php';
 
@@ -24,7 +28,7 @@ class DA_QueryClass {
     }
 
     public function AddField($FieldValue_, $ColumnName_ = "0") {
-        trigger_error("AddField function is depricated. Use setField(columnName, fieldValue) or setField(fieldValue) instead", E_USER_NOTICE);
+        trigger_error("AddField function is depricated. Use setField(columnName, fieldValue) or setField(fieldValue) instead");
         if ($ColumnName_ == "0") {
             array_push($this->FieldListArray, $FieldValue_);
         } else {
@@ -45,12 +49,6 @@ class DA_QueryClass {
             $columnName = $args[0];
             $filedValue = $args[1];
             $this->FieldListArray[$columnName] = $filedValue;
-        }
-        
-        if ($ColumnName_ == "0") {
-            array_push($this->FieldListArray, $FieldValue_);
-        } else {
-            $this->FieldListArray[$ColumnName_] = $FieldValue_;
         }
     }
 
