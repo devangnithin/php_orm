@@ -41,9 +41,10 @@ Note: Insert method returns true on successful insertion and false on error. Ins
 4. Add fields which need to be inserted is value-key pair.
 	$QueryClassObject->AddField("Password Reset","Status");
 	NOTE: The field value appears after the value bypassing general convention. In the example above Status is the db field. This need to be corrected.
- 5. Add condition to update
+
+5. Add condition to update
  	$QueryClassObject->AddCondition("Email", $Email_);
- 6.Call update method.
+6.Call update method.
 	$QueryClassObject->Update()
 Note: Update method returns true on successful updation and false on error.
 
