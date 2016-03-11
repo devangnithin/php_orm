@@ -1,48 +1,38 @@
 # php_orm
 # SetUp
 1. You need to update the db connection details in PhpORM/DA_DataBaseConnectionClass.php
+ 
+# Common to all crud
+1. Import the DA_QueryClass. eg require_once(dirname(__FILE__)."/DataAccessLayer/DA_QueryClass.php");. Make sure path referes correctly.
+2. Create a new object of QueryClass.
+    $queryClassObject=new QueryClass();
+3. Set table name using setTable method.
+  $queryClassObject->setTable("userinfo");
 
 # Issuing select command.
-1. Import the DA_QueryClass. eg require_once(dirname(__FILE__)."/DataAccessLayer/DA_QueryClass.php");. Make sure path referes correctly.
-2. Create a new object of DA_QueryClass.
-    $QueryClassObject=new DA_QueryClass();
-3. Set table name using SetTable method.
-  $QueryClassObject->SetTable("userinfo");
-4. Add fields which need to be queried.
-        $QueryClassObject->setField("PassWord");
-        $QueryClassObject->setField("Status");
-5. Add condition to select. (Optional)        
-        $QueryClassObject->AddCondition("Email", $EmailId_);
-6.  Run select method.       
-        $LoginReturn=json_decode($QueryClassObject->Select());
-NOTE: Select method returns the queried value in JSON format. You may choose to decode the JSON or use it appropriately. In this example it is decoded and set to variable and the avriable can be queried using $LoginReturn[0]->PassWord to get the vale.
+i. Add fields which need to be queried.
+        $queryClassObject->setField("PassWord");
+        $queryClassObject->setField("Status");
+ii. Add condition to select. (Optional)        
+        $queryClassObject->addCondition("Email", $EmailId_);
+iii.  Run select method.       
+        $loginResponse=json_decode($queryClassObject->select()); // Returns JSON
+NOTE: Select method returns the queried value in JSON format. You may choose to decode the JSON or use it appropriately. In this example it is decoded and set to variable and the variable can be queried using $loginReturned[0]->PassWord to get the vale.
 
 # Issuing Insert command.
-1. Import the DA_QueryClass. eg require_once(dirname(__FILE__)."/DataAccessLayer/DA_QueryClass.php");. Make sure path referes correctly.
-2. Create a new object of DA_QueryClass.
-    $QueryClassObject=new DA_QueryClass();
-3. Set table name using SetTable method.
-  $QueryClassObject->SetTable("userinfo");
-4. Add fields which need to be inserted.
-        $QueryClassObject->setField("PassWord");
-5. Execute insert method.
-        $QueryClassObject->Insert()
+i. Add fields which need to be inserted.
+        $queryClassObject->setField("PassWord");
+ii. Execute insert method.
+        $queryClassObject->insert() //returns Boolean
         
-Note: Insert method returns true on successful insertion and false on error. Insert query as of now cannot match fieldname and value so it will expect all corresponding values to be present in same order as db fields. put an empty string if field value is not present. This need to be corrected in future versions.
+Insert query as of now cannot match fieldname and value so it will expect all corresponding values to be present in same order as db fields. put an empty string if field value is not present. This need to be corrected in future versions.
 	i. To insert CURRENT_TIMESTAMP value pass value as 'CURRENT_TIMESTAMP' .
-	ii. 
 
 # Issuing Update command.
-1. Import the DA_QueryClass. eg require_once(dirname(__FILE__)."/DataAccessLayer/DA_QueryClass.php");. Make sure path referes correctly.
-2. Create a new object of DA_QueryClass.
-	 $QueryClassObject=new DA_QueryClass();
-3. Set table name using SetTable method.
-	$QueryClassObject->SetTable("userinfo");
-4. Add fields which need to be inserted is value-key pair.
-	$QueryClassObject->setField("Status", "Password Reset"); (sqlfiled, value)
-5. Add condition to update
- 	$QueryClassObject->AddCondition("Email", $Email_);
-6.Call update method.
-	$QueryClassObject->Update()
-Note: Update method returns true on successful updation and false on error.
+i. Add fields which need to be inserted is value-key pair.
+	$queryClassObject->setField("Status", "Password Reset"); (sqlfiled, value)
+ii. Add condition to update
+ 	$queryClassObject->addCondition("Email", $Email_);
+iii.Call update method.
+	$queryClassObject->Update() // returns Boolean
 
