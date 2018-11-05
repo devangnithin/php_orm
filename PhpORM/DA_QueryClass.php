@@ -17,10 +17,13 @@ class QueryClass {
     private $dataBaseConnect;
     private $connection;
 
-    public function QueryClass() { //Constructor
+    public function __construct() {
         $db = new DA_DataBaseConnectionClass();
         $this->dataBaseConnect = $db;
         $this->connection = $db->getConnection();
+    }
+    public function QueryClass() { //Constructor
+        self::__construct();
     }
 
     public function setTable($TableName_) {
