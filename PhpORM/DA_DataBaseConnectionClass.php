@@ -1,32 +1,32 @@
 <?php
 require_once 'DA_DataBaseConnectionInterface.php';
-class DA_DataBaseConnectionClass implements DA_DataBaseConnectionInterface {
+class DataBaseConnectionClass implements DataBaseConnectionInterface {
     private static $UserName = "root";
     private static $Password = "";
     private static $DataBase = "ambera5m_eintegral";
     private static $Server = "localhost";
     private static $connection;
+    
+    public function __construct() {
+        self::$connection = mysqli_connect(self::$Server,self::$UserName,self::$Password, self::$DataBase);
+    }
+    
+    public function DataBaseConnectionClass() {
+        self::__construct();
+    }
 
-    public static function getConnection()
-    {
+    public static function getConnection() {
         return self::$connection;
     }
 
-    public function Disconnect()
-    {
+    public function Disconnect() {
 
     }
-    public function TransactionBegin($TransactionName)
-    {
+    public function TransactionBegin($TransactionName) {
         mysql_query('$TransactionName');
     }
-    public function EndTransaction()
-    {
+    public function EndTransaction() {
         mysql_query("commit");
-    }
-    public function DA_DataBaseConnectionClass()
-    {
-        self::$connection = mysqli_connect(self::$Server,self::$UserName,self::$Password, self::$DataBase);
     }
 
     /*public function DA_DataBaseConnectionClass($Server_,$Database_)
